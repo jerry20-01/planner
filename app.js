@@ -92,4 +92,27 @@ if ('notification' in window) {
         }
     });
 }
+function checkTasks() {
+    // Lógica para verificar las tareas del Excel
+    // Supongamos que tienes un array `tasks` con las tareas pendientes
+    const tasks = [
+        { title: "Tarea 1", dueDate: "2024-09-30" },
+        { title: "Tarea 2", dueDate: "2024-10-01" }
+    ];
+
+    const today = new Date();
+    tasks.forEach(task => {
+        const dueDate = new Date(task.dueDate);
+        const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+
+        if (daysLeft === 3) {
+            new Notification(`Recordatorio: ${task.title}`, {
+                body: `La tarea "${task.title}" se vence en 3 días.`,
+            });
+        }
+    });
+}
+
+// Llama a checkTasks() después de cargar el Excel
+checkTasks();
 
