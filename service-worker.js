@@ -1,9 +1,23 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-      console.log('Service Worker registrado con éxito:', registration.scope);
-    }, function(err) {
-      console.log('Error en el registro del Service Worker:', err);
-    });
-  });
-}
+const CACHE_NAME = 'cronograma-cache-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/app.js',
+  '/style.css',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
